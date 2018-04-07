@@ -6,8 +6,8 @@ import Segmentation
 import  SegmentationDougman
 import cv2
 
-folder="113"
-image="04_L.bmp"
+folder="001"
+image="01_L.bmp"
 image_path="IITD Database/"+folder+"/"+image
 eye=cv2.imread(image_path,0)
 eye_denoised=filters.median(eye,selem=np.ones((5,5)))
