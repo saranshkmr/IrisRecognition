@@ -1,36 +1,52 @@
-import math
+import numpy as np
+import cv2
+from skimage.io import imread
+import skimage
+from skimage import img_as_float
+from matplotlib import pyplot as plt
 def gaborFilter(normalizedImage):
-    thetaNot=45
-    alpha=40
-    beta=40
-    omega=25
-    rNot=40
+    ksize = (8,8) # size of gabor filter (n, n)
+    sigma = 2.0 # standard deviation of the gaussian function
+    theta = np.pi/4 # orientation of the normal to the parallel stripes
+    lamda = 5.0 # wavelength of the sunusoidal factor
+    gamma = 0.8 # spatial aspect ratio
+    psi   = 0 # phase offset
+
+    #ktype - type and range of values that each pixel in the gabor kernel can hold
+    # cv2.getGaborKernel(ksize, sigma, theta, lambda, gamma, psi, ktype)
+
+    normalizedImage=np.asarray(normalizedImage)
+    #print(normalizedImage)
+
+    realKernel=cv2.getGaborKernel(ksize, sigma, theta, lamda, gamma, psi, ktype=cv2.CV_32F)
+    imaginaryKernel=cv2.getGaborKernel(ksize, sigma, theta, lamda, gamma, psi + np.pi/2, ktype=cv2.CV_32F)
+
+    realFilteredImage=cv2.filter2D(normalizedImage, cv2.CV_8UC3, realKernel)
+    imaginaryFilteredImage = cv2.filter2D(normalizedImage, cv2.CV_8UC3, imaginaryKernel)
+
+    realFilteredImage=skimage.img_as_float(realFilteredImage)
+    imaginaryFilteredImage=skimage.img_as_float(imaginaryFilteredImage)
     str=""
-    str1=""
-    for rho in range(0,41):
-        for fi in range(0,360):
-            real = normalizedImage[rho][fi] * (math.cos(omega * (thetaNot - fi) * 3.14 / 180) * math.cosh((
-                (math.pow(((thetaNot - fi) / beta), 2)) - (math.pow(((rNot - rho) / alpha), 2))) * 3.14 / 180) + (
-                                                           (math.sin(omega * (thetaNot - fi))) * math.sinh((
-                                                       (math.pow(((thetaNot - fi) / beta), 2)) + (
-                                                       math.pow(((rNot - rho) / alpha), 2))) * 3.14 / 180)))
-            imaginary = normalizedImage[rho][fi] * (math.cos(omega * (thetaNot - fi) * 3.14 / 180) * math.sinh((
-                (math.pow(((thetaNot - fi) / beta), 2)) + (math.pow(((rNot - rho) / alpha), 2))) * 3.14 / 180) - (
-                                                           (math.sin(omega * (thetaNot - fi))) * math.cosh((
-                                                       (math.pow(((thetaNot - fi) / beta), 2)) - (
-                                                       math.pow(((rNot - rho) / alpha), 2))) * 3.14 / 180)))
-            if(real>=0):
+    str1="0"
+    for i in range(40):
+        for j in range(360):
+            if(realFilteredImage[i][j]>=0.5):
                 str1="1"
             else:
                 str1="0"
+            str=str+str1
+            if (imaginaryFilteredImage[i][j] >= 0.5):
+                str1 = "1"
+            else:
+                str1 = "0"
             str=str+str1
 
-            if(imaginary>=0):
-                str1="1"
-            else:
-                str1="0"
-            str=str+str1
     print(str)
+    plt.imshow(realFilteredImage,cmap='gray')
+    plt.show()
+
+    plt.imshow(imaginaryFilteredImage,cmap='gray')
+    plt.show()
 
 
 
