@@ -6,7 +6,7 @@ import Segmentation
 import  SegmentationDougman
 import cv2
 
-folder="001"
+folder="050"
 image="05_L.bmp"
 image_path="IITD Database/"+folder+"/"+image
 eye=cv2.imread(image_path,0)

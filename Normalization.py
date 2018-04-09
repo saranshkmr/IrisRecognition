@@ -39,8 +39,8 @@ def normalization(img,rp,ri,xp,yp):
         i=i+1
         r=r+ref
 
-   # print(normalizedImage)
-    plt.imshow(normalizedImage, cmap='gray')
-    plt.show()
+    #print(normalizedImage)
+    #plt.imshow(normalizedImage, cmap='gray')
+    #plt.show()
     GaborFilter.gaborFilter(normalizedImage)
 
