@@ -1,6 +1,7 @@
 import math
 import skimage
 import GaborFilter
+import bicubicinterpolation
 from matplotlib import pyplot as plt
 def normalization(img,rp,ri,xp,yp):
 
@@ -40,7 +41,7 @@ def normalization(img,rp,ri,xp,yp):
         r=r+ref
 
     #print(normalizedImage)
-    #plt.imshow(normalizedImage, cmap='gray')
-    #plt.show()
+    plt.imshow(normalizedImage, cmap='gray')
+    plt.show()
     GaborFilter.gaborFilter(normalizedImage)
-
+    #bicubicinterpolation.bicubicinterpolation(normalizedImage)
