@@ -44,11 +44,10 @@ def getPossibleCenter(temp):
 
 
 def segmentation(eye,eye_denoised):
+    print("----------Segmentation-----------")
     possibleCenter=[]
     pupilCircle=getPossiblePupilCircle(eye_denoised)
-    #print("pupil circle length",len(pupilCircle))
-    #print(pupilCircle)
-    #print(len(possibleCenter))
+
     if(len(pupilCircle)==0):
         for i in range(50, 200):  # 0 to 240
             for j in range(50, 250):  # 0 to 320
@@ -118,11 +117,9 @@ def segmentation(eye,eye_denoised):
     print("R2", R2)
 
     cv2.circle(cimg, (Y, X), R2, (0, 0, 255), 2)
-    '''cv2.imshow('detected circles', cimg)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()'''
-    plt.imshow(cimg, cmap='gray')
-    plt.show()
-
+    # cv2.imshow("Segmented Image",cimg)
+    # cv2.waitKey(1000)
+    #cv2.destroyWindow("Segmented Image")
+    eye=skimage.img_as_float(eye)
     Normalization.normalization(eye, R1, R2, X, Y)
 

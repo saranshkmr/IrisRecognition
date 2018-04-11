@@ -8,7 +8,7 @@ def readNow(outFileName):
 def readStringFromFile():
     indexFile = open("indexFile.txt", "r")
     indexString = indexFile.read()
-    i = str(int(indexString[0]) - 1)
+    i = str(int(not(int(indexString[0]))))
     outFileName = "code" + i
     codeArray=readNow(outFileName)
     return codeArray

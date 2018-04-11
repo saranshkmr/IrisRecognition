@@ -1,18 +1,16 @@
 import math
-import skimage
-import GaborFilter
 import bicubicinterpolation
-from matplotlib import pyplot as plt
+import cv2
+import numpy as np
+import skimage
 def normalization(img,rp,ri,xp,yp):
 
-
+    print("----------Normalization-----------")
     normalizedImage=[[0 for i in range(361)] for j in range(41)]  #361-41
-    tempImage=[]
     i=0
     j=0
     ref=float((ri-rp)/40)            #40
     r=float(rp)
-    print("--------------------In Normalization------------------------")
     while(int(r)<ri):
         j=0
         for t in range(0,360):         #0,360,1
@@ -40,8 +38,8 @@ def normalization(img,rp,ri,xp,yp):
         i=i+1
         r=r+ref
 
+    normalizedImage=np.asarray(normalizedImage)
     #print(normalizedImage)
-    plt.imshow(normalizedImage, cmap='gray')
-    plt.show()
-    GaborFilter.gaborFilter(normalizedImage)
-    #bicubicinterpolation.bicubicinterpolation(normalizedImage)
+    # cv2.imshow("normalized image",normalizedImage)
+    # cv2.waitKey(0)
+    bicubicinterpolation.bicubicinterpolation(normalizedImage)

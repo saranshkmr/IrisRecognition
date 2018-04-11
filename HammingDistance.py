@@ -1,5 +1,3 @@
-import math
-import numpy as np
 import ReadStringFromFile
 from operator import xor
 
@@ -38,6 +36,7 @@ def rotateRight(l, d):
 
 
 def hammingdistance(strArray):
+    print("----------Hamming distance-----------")
     maxPercentage=0
 
     codeArray=ReadStringFromFile.readStringFromFile()
@@ -45,7 +44,8 @@ def hammingdistance(strArray):
     for i in range(len(strArray)):
         codeB = strArray[i].split()
         #print(codeB)
-        for numberOfPixelsShift in range(0, 20):
+        maxPercentage=0
+        for numberOfPixelsShift in range(0, 10):
             codeC = list(codeB)
             left = rotateLeft(codeC, numberOfPixelsShift * 2)
             codeC = list(codeB)
@@ -54,10 +54,13 @@ def hammingdistance(strArray):
             matchRight = matchPercentage(codeArray[i].split(), right)
             if (maxPercentage < matchLeft):
                 maxPercentage = matchLeft
+                #print("rotation=",numberOfPixelsShift)
             if (maxPercentage < matchRight):
                 maxPercentage = matchRight
+                #print("rotation=", numberOfPixelsShift)
         print("maxPercentage=",maxPercentage)
         finalPercentage=finalPercentage+maxPercentage
     finalPercentage=finalPercentage/8
     print("finalPercent=",finalPercentage)
+
 
