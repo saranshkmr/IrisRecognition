@@ -62,5 +62,3 @@ def hammingdistance(strArray):
         finalPercentage=finalPercentage+maxPercentage
     finalPercentage=finalPercentage/8
     print("finalPercent=",finalPercentage)
-
-

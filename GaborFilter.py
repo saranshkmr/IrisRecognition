@@ -53,24 +53,56 @@ def manyFilteredImages(normalizedImage,ksize,sigma,theta,lamda,gamma,psi):
     imaginaryFilteredImage = cv2.filter2D(normalizedImage, -1, imaginaryKernel)
     # print(realFilteredImage)
     # print(imaginaryFilteredImage)
-    squareReal=SameImageMultiplication.sameImageMultiplication(realFilteredImage,realFilteredImage)
-    squareImag=SameImageMultiplication.sameImageMultiplication(imaginaryFilteredImage,imaginaryFilteredImage)
+    #
+    # max = -500
+    # min = 500
+    # for i in range(40):
+    #     for j in range(360):
+    #         if (realFilteredImage[i][j] > max):
+    #             max = realFilteredImage[i][j]
+    #         if (realFilteredImage[i][j] < min):
+    #             min = realFilteredImage[i][j]
+    #
+    # for i in range(40):
+    #     for j in range(360):
+    #         realFilteredImage[i][j] = ((realFilteredImage[i][j] - min) / (max - min)) * 2 - 1
+    #         if(realFilteredImage[i][j]>1.0 or realFilteredImage[i][j]<-1.0):
+    #             print("hola",realFilteredImage[i][j])
+    #
+    #
+    # max = -500
+    # min = 500
+    # for i in range(40):
+    #     for j in range(360):
+    #         if (imaginaryFilteredImage[i][j] > max):
+    #             max = imaginaryFilteredImage[i][j]
+    #         if (imaginaryFilteredImage[i][j] < min):
+    #             min = imaginaryFilteredImage[i][j]
+    #
+    # for i in range(40):
+    #     for j in range(360):
+    #         imaginaryFilteredImage[i][j] = ((imaginaryFilteredImage[i][j] - min) / (max - min)) * 2 - 1
+    # squareReal=SameImageMultiplication.sameImageMultiplication(realFilteredImage,realFilteredImage)
+    # squareImag=SameImageMultiplication.sameImageMultiplication(imaginaryFilteredImage,imaginaryFilteredImage)
 
-    squareReal = skimage.filters.median(squareReal, selem=np.ones((5, 5)))
-    squareImag=skimage.filters.median(squareImag,selem=np.ones((5,5)))
-    realFilteredImage=SameImageMultiplication.sameImageMultiplication(realFilteredImage,squareReal)
-    imaginaryFilteredImage=SameImageMultiplication.sameImageMultiplication(imaginaryFilteredImage,squareImag)
+    # print(realFilteredImage)
+    # print(imaginaryFilteredImage)
+
+    # squareReal = skimage.filters.median(squareReal, selem=np.ones((5, 5)))
+    # squareImag=skimage.filters.median(squareImag,selem=np.ones((5,5)))
+    # realFilteredImage=SameImageMultiplication.sameImageMultiplication(realFilteredImage,squareReal)
+    # imaginaryFilteredImage=SameImageMultiplication.sameImageMultiplication(imaginaryFilteredImage,squareImag)
     return  realFilteredImage,imaginaryFilteredImage
 
 
 def gaborFilter(normalizedImage):
     print("----------Gabor filter-----------")
-    ksize = (5,5) # size of gabor filter (n, n)
+    ksize = (4,4) # size of gabor filter (n, n)
     sigma = 1 # standard deviation of the gaussian function
     theta = 0 # orientation of the normal to the parallel stripes
     lamda = 10 # wavelength of the sunusoidal factor
-    gamma = 1 # spatial aspect ratio
-    psi   = np.pi/8 # phase offset
+    gamma = 0.9 # spatial aspect ratio
+    psi   =0#np.pi/20 # phase offset
     #ktype - type and range of values that each pixel in the gabor kernel can hold
     # cv2.getGaborKernel(ksize, sigma, theta, lambda, gamma, psi, ktype)
 
@@ -111,4 +143,4 @@ def gaborFilter(normalizedImage):
         #print("r0=",r0," r1=",r1," i0=",i0," i1=",i1)
 
     WriteStringToFile.writeStringToFile(strArray)
-    HammingDistance.hammingdistance(strArray)
+    #HammingDistance.hammingdistance(strArray)

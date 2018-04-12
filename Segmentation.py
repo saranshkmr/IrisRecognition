@@ -118,8 +118,7 @@ def segmentation(eye,eye_denoised):
 
     cv2.circle(cimg, (Y, X), R2, (0, 0, 255), 2)
     # cv2.imshow("Segmented Image",cimg)
-    # cv2.waitKey(1000)
-    #cv2.destroyWindow("Segmented Image")
+    # cv2.waitKey(0)
+    # cv2.destroyWindow("Segmented Image")
     eye=skimage.img_as_float(eye)
     Normalization.normalization(eye, R1, R2, X, Y)
-

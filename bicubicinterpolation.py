@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import skimage
 import GaborFilter
+import EyeLidRemoval
 
 def bicubicinterpolation(normimg):
     print("----------BicubicInterpolation-----------")
@@ -20,11 +21,25 @@ def bicubicinterpolation(normimg):
     resultimg=cv2.resize(convimg,(360,40), interpolation=cv2.INTER_CUBIC)
     #resultimg = skimage.img_as_float(resultimg)
     #print(resultimg)
+    max=-500
+    min=500
     for i in range(40):
         for j in range(360):
-            resultimg[i][j]=normimg[i][j]+resultimg[i][j]-1
+            resultimg[i][j]=normimg[i][j]-resultimg[i][j]
+            if(resultimg[i][j]>max):
+                max=resultimg[i][j]
+            if(resultimg[i][j]<min):
+                min=resultimg[i][j]
+
+    for i in range(40):
+        for j in range(360):
+            resultimg[i][j]=((resultimg[i][j]-min)/(max-min))*2-1
+
+    #print(np.subtract(normimg,resultimg))
+
     #print(resultimg)
     # cv2.imshow("bicubic interpolation processed image",resultimg)
     # cv2.waitKey(0)
     # cv2.destroyWindow("bicubic interpolation processed image")
-    GaborFilter.gaborFilter(resultimg)
+    EyeLidRemoval.eyeLidRemoval(normimg)
+    #GaborFilter.gaborFilter(normimg)

@@ -2,6 +2,7 @@ import math
 import bicubicinterpolation
 import cv2
 import numpy as np
+import EyeLidRemoval
 import skimage
 def normalization(img,rp,ri,xp,yp):
 
@@ -29,7 +30,7 @@ def normalization(img,rp,ri,xp,yp):
             elif (y2 < 0 and x2 < 240 and x2 > 0):
                 normalizedImage[i][j] = img[x2][0]
             elif (y2 > 320 and x2 < 240 and x2 > 0):
-                normalizedImage[i][j] = img[319][y2]
+                normalizedImage[i][j] = img[x2][319]
             elif(x2 < 0 and y2 < 0):
                 normalizedImage[i][j]=img[0][0]
             else:
@@ -42,4 +43,5 @@ def normalization(img,rp,ri,xp,yp):
     #print(normalizedImage)
     # cv2.imshow("normalized image",normalizedImage)
     # cv2.waitKey(0)
+    #EyeLidRemoval.eyeLidRemoval(normalizedImage)
     bicubicinterpolation.bicubicinterpolation(normalizedImage)
