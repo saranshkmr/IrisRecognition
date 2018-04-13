@@ -133,34 +133,48 @@ def gaborFilter(normalizedImage,maskImage):
         maxI=0
 
         str=""
+
         for i in range(40):
             for j in range(360):
-                if(realFilteredImageArray[k][i][j]>maxR):maxR=realFilteredImageArray[k][i][j]
-                if(realFilteredImageArray[k][i][j]<minR):minR=realFilteredImageArray[k][i][j]
-                if (imaginaryFilteredImageArray[k][i][j] > maxI): maxI = imaginaryFilteredImageArray[k][i][j]
-                if (imaginaryFilteredImageArray[k][i][j] < minI): minI = imaginaryFilteredImageArray[k][i][j]
+                if (realFilteredImageArray[k][i][j] > maxR): maxR = int(realFilteredImageArray[k][i][j])
+                if (realFilteredImageArray[k][i][j] < minR): minR = int(realFilteredImageArray[k][i][j])
+                if (imaginaryFilteredImageArray[k][i][j] > maxI): maxI = int(imaginaryFilteredImageArray[k][i][j])
+                if (imaginaryFilteredImageArray[k][i][j] < minI): minI = int(imaginaryFilteredImageArray[k][i][j])
+        # print(minR,maxR,minI,maxI)
+        for i in range(40):
+            for j in range(360):
+
                 if(maskImage[i][j]>200):
-                    str1="2"
-                elif(realFilteredImageArray[k][i][j]>=(maxR+minR)/2):
-                    str1="1"
-                    r1+=1
-                else:
+                    str1="4"
+                elif((realFilteredImageArray[k][i][j]>=0) and (realFilteredImageArray[k][i][j]<=(maxR+minR)/4)):
                     str1="0"
+                    r1+=1
+                elif ((realFilteredImageArray[k][i][j] >= (maxR+minR)/4) and (realFilteredImageArray[k][i][j] <= (maxR + minR) / 2)):
+                    str1="1"
                     r0+=1
+                elif ((realFilteredImageArray[k][i][j] >= (maxR + minR) / 2) and (realFilteredImageArray[k][i][j] <= 3*((maxR+minR)/4))):
+                    str1="2"
+                else:str1="3"
                 str=str+str1
                 if (maskImage[i][j] > 200):
-                    str1 = "2"
-                elif (imaginaryFilteredImageArray[k][i][j] >=(maxI+minI)/2):
-                    str1 = "1"
-                    i1+=1
-                else:
+                    str1 = "4"
+                elif ((imaginaryFilteredImageArray[k][i][j] >= 0) and (imaginaryFilteredImageArray[k][i][j] <= (maxI + minI) / 4)):
                     str1 = "0"
-                    i0+=1
-                str=str+str1
+                    r1 += 1
+                elif ((imaginaryFilteredImageArray[k][i][j] >= (maxI + minI) / 4) and (imaginaryFilteredImageArray[k][i][j] <= (
+                        maxI + minI) / 2)):
+                    str1 = "1"
+                    r0 += 1
+                elif ((imaginaryFilteredImageArray[k][i][j] >= (maxI + minI) / 2) and (imaginaryFilteredImageArray[k][i][j] <= 3 * (
+                        (maxI + minI) / 4))):
+                    str1 = "2"
+                else:
+                    str1 = "3"
+                str = str + str1
             str=str+" "
         strArray.append(str)
 
-        # print("r0=",r0," r1=",r1," i0=",i0," i1=",i1)
+        #print("r0=",r0," r1=",r1," i0=",i0," i1=",i1)
         # print(minR,maxR,minI,maxI)
 
     WriteStringToFile.writeStringToFile(strArray)

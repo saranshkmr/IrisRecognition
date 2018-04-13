@@ -6,8 +6,8 @@ import bicubicinterpolation
 #import  SegmentationDougman
 import cv2
 
-folder="012"
-image="03_L.bmp"
+folder="016"
+image="02_L.bmp"
 image_path="IITD Database/"+folder+"/"+image
 eye=cv2.imread(image_path,0)
 #print(eye)

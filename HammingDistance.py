@@ -4,18 +4,18 @@ from operator import xor
 
 def matchPercentage(s,s1):
     count=0
-    twocount=0
+    fourCount=0
     for i in range(len(s)):
         code1=s[i]
         code2=s1[i]
         #print(len(s[i]))
         for j in range(0,len(s[0])):
-            if(int(code1[i])==2 or int(code2[i])==2):
-                twocount=twocount+1
+            if(int(code1[i])==4 or int(code2[i])==4):
+                fourCount=fourCount+1
                 continue
-            elif (((xor(int(code1[i]), int(code2[i]))) == 0)):
+            elif (int(code1[i])==int(code2[i])):
                     count = count + 1
-    return (count / (28800-twocount)*100)
+    return (count / (28800-fourCount)*100)
 
 
 def rotateLeft(l, d):
