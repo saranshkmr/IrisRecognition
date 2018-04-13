@@ -3,7 +3,7 @@ import cv2
 import skimage
 import math
 
-def eyeLidRemoval(normImage):
+def eyeLidRemoval(normalImage):
     # ksize = (10, 10)  # size of gabor filter (n, n)
     # sigma = 0.9  # standard deviation of the gaussian function
     # theta = np.pi/16  # orientation of the normal to the parallel stripes
@@ -22,11 +22,12 @@ def eyeLidRemoval(normImage):
     #
     # clahe = cv2.createCLAHE(clipLimit=2, tileGridSize=(8, 8))
     # filteredImage = clahe.apply(filteredImage)
-    normImage= skimage.img_as_ubyte(normImage)
+    normalImage= skimage.img_as_ubyte(normalImage)
+    normImage=[[0 for i in range(360)] for j in range(40)]
     max = -5
     for i in range(40):
         for j in range(360):
-            normImage[i][j]=(normImage[i][j]-255)*(-1)
+            normImage[i][j]=(normalImage[i][j]-255)*(-1)
             if(normImage[i][j]>229):
                 normImage[i][j]=255
             else:
@@ -54,53 +55,68 @@ def eyeLidRemoval(normImage):
             a= int(sum / count)
             if(a>max):
                 max=a
-            if(a>150):
+            if(a>100):
                 convimg[i][j]=255
             else:
                 convimg[i][j]=0
     first=0
     last=270
-    for i in range(39,37,-1):
-        for j in range(90,270):
+    for i in range(39,34,-1):
+        for j in range(90,180):
             if(convimg[i][j]>200 and first==0):
                 first=j
-    for i in range(39,37,-1):
-        for j in range(270,90,-1):
+    for i in range(39,34,-1):
+        for j in range(270,180,-1):
             if(convimg[i][j]>200 and last==270):
                 last=j
+    if(last==270 and first!=0):
+        last=180
+    elif(first==0 and last!=270):
+        first=180
     c=(last-first)/2+first
-    a=c-first
+    a=(c-first)
     maxPerc=0
     B=0
-    for b in range(1,55):
+    A=0
+    print(first,last)
+    for b in range(5,55):
         whiteCount=0
         blackCount=0
         for y in range(first,last):
             # print("a=",a,"b=",b,"c=",c,"y=",y)
-            # print("sqrt=",1-((y-c)*(y-c)/(b*b)))
+            # print("sqrt=",1-((y-c)*(y-c)/(a*a))*b)
             if(1-((y-c)*(y-c)/(a*a))>=0):
                 x=(int)(math.sqrt(1-((y-c)*(y-c)/(a*a)))*b)
                 #print("x=",x,"b=",b)
                 if(x<40 and x>=0):
-                    if(convimg[x][y]>200):
+                    if(convimg[39-x][y]>200):
                         whiteCount=whiteCount+1
                     else:blackCount=blackCount+1
-        print(whiteCount/(whiteCount+blackCount))
-        if(maxPerc<(whiteCount/(whiteCount+blackCount))):
+        #print(whiteCount/(whiteCount+blackCount))
+        if(maxPerc<(whiteCount/(whiteCount+blackCount)+0.08)):
                 maxPerc=whiteCount/(whiteCount+blackCount)
                 B=b
-                print("maxPerc=",maxPerc)
-                print("B=",B)
-    newImg=[[1.0 for j in range(len(convimg[0]))] for i in range(len(convimg))]
+                #A=a
+                #print("maxPerc=",maxPerc)
+                #print("A=",A,"B=",B)
+    #for B in range(10,35):
+    newImg=[[convimg[i][j] for j in range(len(convimg[0]))] for i in range(len(convimg))]
     for y in range(first, last):
-        x = (int)(math.sqrt(1 - ((y - c) * (y - c) / (a * a))) * B)
-        if (x < 40 and x >= 0):
-            newImg[39-x][y]=0.0
-            #print(39-x,y)
+        if((1 - ((y - c) * (y - c) / (a * a)))>0):
+            x = (int)(math.sqrt(1 - ((y - c) * (y - c) / (a * a))) * B)
+            #while(x>0):
+
+            if (x < 40 and x >= 0):
+                newImg[39-x][y]=255
+                #x=x-1
+                #print(39-x,y)
 
     newImg=np.asarray(newImg)
-    #print(newImg)
-    cv2.imshow("Eye lid removed Image", convimg)
-    cv2.waitKey(0)
-    cv2.imshow("mask",newImg)
-    cv2.waitKey(0)
+    newImg=skimage.img_as_ubyte(newImg)
+    # print(newImg)
+
+    # cv2.imshow("normalized", normalImage)
+    # cv2.waitKey(0)
+    # cv2.imshow("mask",newImg)
+    # cv2.waitKey(0)
+    return newImg
