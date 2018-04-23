@@ -115,8 +115,8 @@ def segmentation(eye,eye_denoised):
         preAvg = Avg
 
     print("R2", R2)
-
-    cv2.circle(cimg, (Y, X), R2, (0, 0, 255), 2)
+    #print(eye)
+    # cv2.circle(cimg, (Y, X), R2, (0, 0, 255), 2)
     # cv2.imshow("Segmented Image",cimg)
     # cv2.waitKey(0)
     # cv2.destroyWindow("Segmented Image")

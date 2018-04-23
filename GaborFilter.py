@@ -3,6 +3,7 @@ import cv2
 import skimage
 import HammingDistance
 import WriteStringToFile
+import math
 import SameImageMultiplication
 from matplotlib import pyplot as plt
 import temporary
@@ -21,7 +22,7 @@ def addSubplot(normalizedImage,ksize,sigma,theta,lamda,gamma,psi):
     for i in range(0,16,2):
         realFilteredImage,imaginaryFilteredImage=manyFilteredImages(normalizedImage,ksize,sigma,theta+(i*np.pi)/16,lamda,gamma,psi)
         # realFilteredImageArray.append(realFilteredImage)
-        # imaginaryFilteredImageArray.append(imaginaryFilteredImage)
+        #  imaginaryFilteredImageArray.append(imaginaryFilteredImage)
         # print(realFilteredImage)
         # print(imaginaryFilteredImage)
         x[i].imshow(realFilteredImage, cmap='gray')
@@ -35,8 +36,8 @@ def addSubplot(normalizedImage,ksize,sigma,theta,lamda,gamma,psi):
 
     for i in range(len(finalReal)):
         for j in range(len(finalReal[0])):
-            finalReal[i][j]=(int)(finalReal[i][j]/8)
-            finalImaginary[i][j]=(int)(finalImaginary[i][j]/8)
+            finalReal[i][j]=finalReal[i][j]/8
+            finalImaginary[i][j]=finalImaginary[i][j]/8
     # finalReal=temporary.tempo(finalReal)
     # finalImaginary=temporary.tempo(finalImaginary)
     #print(finalReal)
@@ -103,7 +104,7 @@ def manyFilteredImages(normalizedImage,ksize,sigma,theta,lamda,gamma,psi):
 def gaborFilter(normalizedImage,maskImage):
     print("----------Gabor filter-----------")
     ksize = (21,21)#(4,4) # size of gabor filter (n, n)
-    sigma = 0.5#6 # standard deviation of the gaussian function
+    sigma = 0.6#6 # standard deviation of the gaussian function
     theta = 0#0 # orientation of the normal to the parallel stripes
     lamda = 10#10 # wavelength of the sunusoidal factor
     gamma = 0.7#0.9 # spatial aspect ratio
@@ -125,54 +126,79 @@ def gaborFilter(normalizedImage,maskImage):
 
 
     for k in range(len(realFilteredImageArray)):
-        #print(realFilteredImageArray[k])
+        # print(realFilteredImageArray[k])
         # print(imaginaryFilteredImageArray[k])
         minR=700
         maxR=0
         minI=700
         maxI=0
+        min = 700
+        max = -700
 
         str=""
-
+        phaseImage = [[0 for i in range(360)] for j in range(40)]
         for i in range(40):
             for j in range(360):
-                if (realFilteredImageArray[k][i][j] > maxR): maxR = int(realFilteredImageArray[k][i][j])
-                if (realFilteredImageArray[k][i][j] < minR): minR = int(realFilteredImageArray[k][i][j])
-                if (imaginaryFilteredImageArray[k][i][j] > maxI): maxI = int(imaginaryFilteredImageArray[k][i][j])
-                if (imaginaryFilteredImageArray[k][i][j] < minI): minI = int(imaginaryFilteredImageArray[k][i][j])
+                if (realFilteredImageArray[k][i][j] > maxR): maxR = float(realFilteredImageArray[k][i][j])
+                if (realFilteredImageArray[k][i][j] < minR): minR = float(realFilteredImageArray[k][i][j])
+                if (imaginaryFilteredImageArray[k][i][j] > maxI): maxI = float(imaginaryFilteredImageArray[k][i][j])
+                if (imaginaryFilteredImageArray[k][i][j] < minI): minI = float(imaginaryFilteredImageArray[k][i][j])
+        # for i in range(40):
+        #     for j in range(360):
+        #         a=(((realFilteredImageArray[k][i][j]-minR)/(maxR-minR))*2)-1
+        #         b = (((imaginaryFilteredImageArray[k][i][j] - minI) / (maxI - minI)) * 2) - 1
+        #         phaseImage[i][j]=math.atan(b/a)
+        #         if (phaseImage[i][j] > max): max = float(phaseImage[i][j])
+        #         if (phaseImage[i][j]< min): min = float(phaseImage[i][j])
+        #         # if(c>0):
+        #         #     phaseImage[i][j]=255
+        #         # else:
+        #         #     phaseImage[i][j]=0
+        # for i in range(40):
+        #     for j in range(360):
+        #         phaseImage[i][j]=phaseImage[i][j]-min
+        # max=max-min
+        # min=0
+        #print(phaseImage)
+        # phaseImage=np.asarray(phaseImage)
+        # cv2.imshow("phase",phaseImage)
+        # cv2.waitKey(0)
+        #cv2.destroyWindow("phase")
+        print(min,max)
         # print(minR,maxR,minI,maxI)
         for i in range(40):
             for j in range(360):
-
                 if(maskImage[i][j]>200):
                     str1="4"
-                elif((realFilteredImageArray[k][i][j]>=0) and (realFilteredImageArray[k][i][j]<=(maxR+minR)/4)):
+                elif((realFilteredImageArray[k][i][j]>=minR) and (realFilteredImageArray[k][i][j]<=minR+((maxR-minR)/4))):
                     str1="0"
                     r1+=1
-                elif ((realFilteredImageArray[k][i][j] >= (maxR+minR)/4) and (realFilteredImageArray[k][i][j] <= (maxR + minR) / 2)):
+                elif ((realFilteredImageArray[k][i][j] >= minR+((maxR-minR)/4)) and (realFilteredImageArray[k][i][j] <= minR+((maxR-minR) / 2))):
                     str1="1"
                     r0+=1
-                elif ((realFilteredImageArray[k][i][j] >= (maxR + minR) / 2) and (realFilteredImageArray[k][i][j] <= 3*((maxR+minR)/4))):
+                elif ((realFilteredImageArray[k][i][j] >= minR+((maxR-minR) / 2)) and (realFilteredImageArray[k][i][j] <= minR+(3*((maxR-minR)/4)))):
                     str1="2"
+
                 else:str1="3"
                 str=str+str1
                 if (maskImage[i][j] > 200):
                     str1 = "4"
-                elif ((imaginaryFilteredImageArray[k][i][j] >= 0) and (imaginaryFilteredImageArray[k][i][j] <= (maxI + minI) / 4)):
+                elif ((imaginaryFilteredImageArray[k][i][j] >= minI) and (imaginaryFilteredImageArray[k][i][j] <= minI+((maxI-minI) / 4))):
                     str1 = "0"
                     r1 += 1
-                elif ((imaginaryFilteredImageArray[k][i][j] >= (maxI + minI) / 4) and (imaginaryFilteredImageArray[k][i][j] <= (
-                        maxI + minI) / 2)):
+                elif ((imaginaryFilteredImageArray[k][i][j] >= minI+((maxI-minI) / 4)) and (imaginaryFilteredImageArray[k][i][j] <= minI+((
+                        maxI-minI) / 2))):
                     str1 = "1"
                     r0 += 1
-                elif ((imaginaryFilteredImageArray[k][i][j] >= (maxI + minI) / 2) and (imaginaryFilteredImageArray[k][i][j] <= 3 * (
-                        (maxI + minI) / 4))):
+                elif ((imaginaryFilteredImageArray[k][i][j] >= minI+((maxI-minI) / 2)) and (imaginaryFilteredImageArray[k][i][j] <= minI+(3 * (
+                        (maxI-minI) / 4)))):
                     str1 = "2"
                 else:
                     str1 = "3"
                 str = str + str1
             str=str+" "
         strArray.append(str)
+        print(str)
 
         #print("r0=",r0," r1=",r1," i0=",i0," i1=",i1)
         # print(minR,maxR,minI,maxI)

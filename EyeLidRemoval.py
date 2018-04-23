@@ -59,20 +59,24 @@ def eyeLidRemoval(normalImage):
                 convimg[i][j]=255
             else:
                 convimg[i][j]=0
-    first=0
+    first=90
     last=270
     for i in range(39,34,-1):
         for j in range(90,180):
-            if(convimg[i][j]>200 and first==0):
+            if(convimg[i][j]>200 and first==90):
                 first=j
     for i in range(39,34,-1):
         for j in range(270,180,-1):
             if(convimg[i][j]>200 and last==270):
                 last=j
-    if(last==270 and first!=0):
-        last=180
-    elif(first==0 and last!=270):
+    print(first,last)
+    if (first == 90 and last == 270):
+        last = 180
+        first = 179
+    elif(first==90 and last!=270):
         first=180
+    elif(last==270 and first!=0):
+        last=180
     c=(last-first)/2+first
     a=(c-first)
     maxPerc=0
@@ -104,12 +108,12 @@ def eyeLidRemoval(normalImage):
     for y in range(first, last):
         if((1 - ((y - c) * (y - c) / (a * a)))>0):
             x = (int)(math.sqrt(1 - ((y - c) * (y - c) / (a * a))) * B)
-            #while(x>0):
+            while(x>0):
 
-            if (x < 40 and x >= 0):
-                newImg[39-x][y]=255
-                #x=x-1
-                #print(39-x,y)
+                if (x < 40 and x >= 0):
+                    newImg[39-x][y]=255
+                x = x - 1
+                    # print(39-x,y)
 
     newImg=np.asarray(newImg)
     newImg=skimage.img_as_ubyte(newImg)

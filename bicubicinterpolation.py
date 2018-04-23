@@ -1,5 +1,6 @@
 from matplotlib import pyplot as plt
 import cv2
+import math
 import numpy as np
 import skimage
 import GaborFilter
@@ -30,18 +31,31 @@ def bicubicinterpolation(normimg):
                 max=resultimg[i][j]
             if(resultimg[i][j]<min):
                 min=resultimg[i][j]
-
+    p=0
+    n=0
     for i in range(40):
         for j in range(360):
             resultimg[i][j]=((resultimg[i][j]-min)/(max-min))*2-1
+    #         if(resultimg[i][j]<0):
+    #             resultimg[i][j]=math.pow(-1*resultimg[i][j],0.5)
+    #             resultimg[i][j]=-1*resultimg[i][j]
+    #             n+=1
+    #         else:
+    #             resultimg[i][j]=math.pow(resultimg[i][j],0.5)
+    #             p+=1
+    #
+    # print("p,n",p,n)
+
+            #print(resultimg[i][j])
+
 
     #print(np.subtract(normimg,resultimg))
 
     #print(resultimg)
     # cv2.imshow("bicubic interpolation processed image",resultimg)
     # cv2.waitKey(0)
-    #cv2.destroyWindow("bicubic interpolation processed image")
-    normimg=skimage.img_as_ubyte(normimg)
+    # cv2.destroyWindow("bicubic interpolation processed image")
+    # normimg=skimage.img_as_ubyte(normimg)
     #print(normimg)
     maskIMage=EyeLidRemoval.eyeLidRemoval(normimg)
     GaborFilter.gaborFilter(normimg,maskIMage)
