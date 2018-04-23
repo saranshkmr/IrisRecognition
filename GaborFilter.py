@@ -166,37 +166,98 @@ def gaborFilter(normalizedImage,maskImage):
         #cv2.destroyWindow("phase")
         print(min,max)
         # print(minR,maxR,minI,maxI)
+        # for i in range(40):
+        #     for j in range(360):
+        #         if(maskImage[i][j]>200):
+        #             str1="8"
+        #         elif((realFilteredImageArray[k][i][j]>=minR) and (realFilteredImageArray[k][i][j]<=minR+((maxR-minR)/8))):
+        #             str1="0"
+        #         elif ((realFilteredImageArray[k][i][j] >= minR+((maxR-minR)/8)) and (realFilteredImageArray[k][i][j] <= minR+2*((maxR-minR) / 8))):
+        #             str1="1"
+        #         elif ((realFilteredImageArray[k][i][j] >= minR+2*((maxR-minR) / 8)) and (realFilteredImageArray[k][i][j] <= minR+(3*((maxR-minR)/8)))):
+        #             str1="2"
+        #         elif ((realFilteredImageArray[k][i][j] >= minR+3*((maxR-minR)/8)) and (realFilteredImageArray[k][i][j] <= minR+4*((maxR-minR) / 8))):
+        #             str1="3"
+        #         elif ((realFilteredImageArray[k][i][j] >= minR+4*((maxR-minR) / 8)) and (realFilteredImageArray[k][i][j] <= minR+5*(((maxR-minR)/8)))):
+        #             str1="4"
+        #         elif ((realFilteredImageArray[k][i][j] >= minR+5*((maxR-minR)/8)) and (realFilteredImageArray[k][i][j] <= minR+6*((maxR-minR) / 8))):
+        #             str1="5"
+        #         elif ((realFilteredImageArray[k][i][j] >= minR+6*((maxR-minR) / 8)) and (realFilteredImageArray[k][i][j] <= minR+7*(((maxR-minR)/8)))):
+        #             str1="6"
+        #         else:str1="7"
+        #
+        #         str=str+str1
+        #
+        #         if (maskImage[i][j] > 200):
+        #             str1 = "8"
+        #         elif ((imaginaryFilteredImageArray[k][i][j] >= minI) and (
+        #                 imaginaryFilteredImageArray[k][i][j] <= minI + ((maxI - minI) / 8))):
+        #             str1 = "0"
+        #         elif ((imaginaryFilteredImageArray[k][i][j] >= minI + ((maxI - minI) / 8)) and (
+        #                 imaginaryFilteredImageArray[k][i][j] <= minI + 2 * ((maxI - minI) / 8))):
+        #             str1 = "1"
+        #         elif ((imaginaryFilteredImageArray[k][i][j] >= minI + 2 * ((maxI - minI) / 8)) and (
+        #                 imaginaryFilteredImageArray[k][i][j] <= minI + (3 * ((maxI - minI) / 8)))):
+        #             str1 = "2"
+        #         elif ((imaginaryFilteredImageArray[k][i][j] >= minI + 3 * ((maxI - minI) / 8)) and (
+        #                 imaginaryFilteredImageArray[k][i][j] <= minI + 4 * ((maxI - minI) / 8))):
+        #             str1 = "3"
+        #         elif ((imaginaryFilteredImageArray[k][i][j] >= minI + 4 * ((maxI - minI) / 8)) and (
+        #                 imaginaryFilteredImageArray[k][i][j] <= minI + 5 * (((maxI - minI) / 8)))):
+        #             str1 = "4"
+        #         elif ((imaginaryFilteredImageArray[k][i][j] >= minI + 5 * ((maxI - minI) / 8)) and (
+        #                 imaginaryFilteredImageArray[k][i][j] <= minI + 6 * ((maxI - minI) / 8))):
+        #             str1 = "5"
+        #         elif ((imaginaryFilteredImageArray[k][i][j] >= minI + 6 * ((maxI - minI) / 8)) and (
+        #                 imaginaryFilteredImageArray[k][i][j] <= minI + 7 * (((maxI - minI) / 8)))):
+        #             str1 = "6"
+        #         else:
+        #             str1 = "7"
+        #
+        #         str = str + str1
+
+        #     str=str+" "
+        # strArray.append(str)
+        # print(str)
+
         for i in range(40):
             for j in range(360):
-                if(maskImage[i][j]>200):
-                    str1="4"
-                elif((realFilteredImageArray[k][i][j]>=minR) and (realFilteredImageArray[k][i][j]<=minR+((maxR-minR)/4))):
-                    str1="0"
-                    r1+=1
-                elif ((realFilteredImageArray[k][i][j] >= minR+((maxR-minR)/4)) and (realFilteredImageArray[k][i][j] <= minR+((maxR-minR) / 2))):
-                    str1="1"
-                    r0+=1
-                elif ((realFilteredImageArray[k][i][j] >= minR+((maxR-minR) / 2)) and (realFilteredImageArray[k][i][j] <= minR+(3*((maxR-minR)/4)))):
-                    str1="2"
-
-                else:str1="3"
-                str=str+str1
                 if (maskImage[i][j] > 200):
                     str1 = "4"
-                elif ((imaginaryFilteredImageArray[k][i][j] >= minI) and (imaginaryFilteredImageArray[k][i][j] <= minI+((maxI-minI) / 4))):
+                elif ((realFilteredImageArray[k][i][j] >= minR) and (
+                        realFilteredImageArray[k][i][j] <= minR + ((maxR - minR) / 4))):
                     str1 = "0"
                     r1 += 1
-                elif ((imaginaryFilteredImageArray[k][i][j] >= minI+((maxI-minI) / 4)) and (imaginaryFilteredImageArray[k][i][j] <= minI+((
-                        maxI-minI) / 2))):
+                elif ((realFilteredImageArray[k][i][j] >= minR + ((maxR - minR) / 4)) and (
+                        realFilteredImageArray[k][i][j] <= minR + ((maxR - minR) / 2))):
                     str1 = "1"
                     r0 += 1
-                elif ((imaginaryFilteredImageArray[k][i][j] >= minI+((maxI-minI) / 2)) and (imaginaryFilteredImageArray[k][i][j] <= minI+(3 * (
-                        (maxI-minI) / 4)))):
+                elif ((realFilteredImageArray[k][i][j] >= minR + ((maxR - minR) / 2)) and (
+                        realFilteredImageArray[k][i][j] <= minR + (3 * ((maxR - minR) / 4)))):
+                    str1 = "2"
+
+                else:
+                    str1 = "3"
+                str = str + str1
+                if (maskImage[i][j] > 200):
+                    str1 = "4"
+                elif ((imaginaryFilteredImageArray[k][i][j] >= minI) and (
+                        imaginaryFilteredImageArray[k][i][j] <= minI + ((maxI - minI) / 4))):
+                    str1 = "0"
+                    r1 += 1
+                elif ((imaginaryFilteredImageArray[k][i][j] >= minI + ((maxI - minI) / 4)) and (
+                        imaginaryFilteredImageArray[k][i][j] <= minI + ((
+                                                                                maxI - minI) / 2))):
+                    str1 = "1"
+                    r0 += 1
+                elif ((imaginaryFilteredImageArray[k][i][j] >= minI + ((maxI - minI) / 2)) and (
+                        imaginaryFilteredImageArray[k][i][j] <= minI + (3 * (
+                        (maxI - minI) / 4)))):
                     str1 = "2"
                 else:
                     str1 = "3"
                 str = str + str1
-            str=str+" "
+            str = str + " "
         strArray.append(str)
         print(str)
 

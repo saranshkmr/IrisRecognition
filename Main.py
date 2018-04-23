@@ -6,8 +6,8 @@ import bicubicinterpolation
 #import  SegmentationDougman
 import cv2
 
-folder="001"
-image="03_L.bmp"
+folder="100"
+image="08_R.bmp"
 image_path="IITD Database/"+folder+"/"+image
 eye=cv2.imread(image_path,0)
 #print(eye)
@@ -15,5 +15,5 @@ eye_denoised=filters.median(eye,selem=np.ones((5,5)))
 #print(eye_denoised)
 #plt.imshow(eye,cmap='gray')
 #plt.show()
-Segmentation.segmentation(eye,eye_denoised)
+Segmentation.segmentation(eye,eye_denoised,eye)
 #bicubicinterpolation.bicubicinterpolation(eye)
