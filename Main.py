@@ -2,8 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from skimage import filters
 import Segmentation
-import bicubicinterpolation
-#import  SegmentationDougman
+import math
 import cv2
 
 folder="100"
@@ -16,4 +15,5 @@ eye_denoised=filters.median(eye,selem=np.ones((5,5)))
 #plt.imshow(eye,cmap='gray')
 #plt.show()
 Segmentation.segmentation(eye,eye_denoised,eye)
-#bicubicinterpolation.bicubicinterpolation(eye)
+
+

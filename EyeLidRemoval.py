@@ -22,7 +22,7 @@ def eyeLidRemoval(normalImage):
     #
     # clahe = cv2.createCLAHE(clipLimit=2, tileGridSize=(8, 8))
     # filteredImage = clahe.apply(filteredImage)
-    normalImage= skimage.img_as_ubyte(normalImage)
+    # normalImage= skimage.img_as_ubyte(normalImage)
     normImage=[[0 for i in range(360)] for j in range(40)]
     max = -5
     for i in range(40):
@@ -122,5 +122,6 @@ def eyeLidRemoval(normalImage):
     # cv2.imshow("normalized", normalImage)
     # cv2.waitKey(0)
     # cv2.imshow("mask",newImg)
+    # cv2.imwrite("eyeLidRemoved.jpg", newImg)
     # cv2.waitKey(0)
     return newImg

@@ -41,6 +41,7 @@ def normalization(img,rp,ri,xp,yp):
 
     normalizedImage=np.asarray(normalizedImage)
     #print(normalizedImage)
+    # cv2.imwrite("normalization.jpg", skimage.img_as_ubyte(normalizedImage))
     # cv2.imshow("normalized image",normalizedImage)
     # cv2.waitKey(0)
     #EyeLidRemoval.eyeLidRemoval(normalizedImage)

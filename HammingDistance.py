@@ -9,11 +9,11 @@ def matchPercentage(s,s1):
         code1=s[i]
         code2=s1[i]
         #print(len(s[i]))
-        for j in range(0,len(s[0])):
-            if(int(code1[i])==4 or int(code2[i])==4):
+        for j in range(0,len(s[i])):
+            if(int(code1[j])==4 or int(code2[j])==4):
                 fourCount=fourCount+1
                 continue
-            elif (int(code1[i])==int(code2[i])):
+            elif (int(code1[j])==int(code2[j])):
                     count = count + 1
     return (count / (28800-fourCount)*100)
 

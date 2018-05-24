@@ -8,8 +8,8 @@ import EyeLidRemoval
 
 def bicubicinterpolation(normimg):
     print("----------BicubicInterpolation-----------")
-    n=10
-    m=18
+    n=40
+    m=360
     convimg=[[0 for x in range(int(360/m))] for y in range(int(40/n))]
     for i in range(0,40,n):
         for j in range(0,360,m):
@@ -17,8 +17,9 @@ def bicubicinterpolation(normimg):
             for x in range(n):
                 for y in range(m):
                     sum=sum+normimg[i+x][j+y]
-            convimg[int(i/n)][int(j/m)]=sum/(n*m)
+            convimg[int(i/n)][int(j/m)]=int(sum/(n*m))
     convimg=np.asarray(convimg)
+    convimg=skimage.img_as_ubyte(convimg)
     resultimg=cv2.resize(convimg,(360,40), interpolation=cv2.INTER_CUBIC)
     #resultimg = skimage.img_as_float(resultimg)
     #print(resultimg)
@@ -27,15 +28,16 @@ def bicubicinterpolation(normimg):
     for i in range(40):
         for j in range(360):
             resultimg[i][j]=normimg[i][j]-resultimg[i][j]
-            if(resultimg[i][j]>max):
-                max=resultimg[i][j]
-            if(resultimg[i][j]<min):
-                min=resultimg[i][j]
-    p=0
-    n=0
-    for i in range(40):
-        for j in range(360):
-            resultimg[i][j]=((resultimg[i][j]-min)/(max-min))*2-1
+    #         if(resultimg[i][j]>max):
+    #             max=resultimg[i][j]
+    #         if(resultimg[i][j]<min):
+    #             min=resultimg[i][j]
+    # p=0
+    # n=0
+    # print("min",min,max)
+    # for i in range(40):
+    #     for j in range(360):
+    #         resultimg[i][j]=(((resultimg[i][j]-min)/(max-min))*2-1)*255
     #         if(resultimg[i][j]<0):
     #             resultimg[i][j]=math.pow(-1*resultimg[i][j],0.5)
     #             resultimg[i][j]=-1*resultimg[i][j]
@@ -51,7 +53,7 @@ def bicubicinterpolation(normimg):
 
     #print(np.subtract(normimg,resultimg))
 
-    #print(resultimg)
+    # print(resultimg)
     # cv2.imshow("bicubic interpolation processed image",resultimg)
     # cv2.waitKey(0)
     # cv2.destroyWindow("bicubic interpolation processed image")
