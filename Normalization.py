@@ -4,9 +4,9 @@ import cv2
 import numpy as np
 import EyeLidRemoval
 import skimage
-def normalization(img,rp,ri,xp,yp):
+def normalization(img,rp,ri,xp,yp,folder,lr,fileNum):
 
-    print("----------Normalization-----------")
+    # print("----------Normalization-----------")
     normalizedImage=[[0 for i in range(360)] for j in range(40)]  #361-41
     i=0
     j=0
@@ -45,4 +45,4 @@ def normalization(img,rp,ri,xp,yp):
     # cv2.imshow("normalized image",normalizedImage)
     # cv2.waitKey(0)
     #EyeLidRemoval.eyeLidRemoval(normalizedImage)
-    bicubicinterpolation.bicubicinterpolation(normalizedImage)
+    bicubicinterpolation.bicubicinterpolation(normalizedImage,folder,lr,fileNum)

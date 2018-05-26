@@ -7,13 +7,13 @@ import Normalization
 
 def getPossiblePupilCircle(img):
     circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, 20,
-                               param1=40, param2=50, minRadius=30, maxRadius=180)
+                               param1=35, param2=50, minRadius=25, maxRadius=90)
     circles = np.uint16(np.around(circles))
     return circles
 
 def getPossibleCenter(temp):
     tbr=set()
-    ref=8
+    ref=20
     for i in range(len(temp)):
         x=temp[i][0]
         y=temp[i][1]
@@ -33,18 +33,18 @@ def getPossibleCenter(temp):
             u = y + ref
         else:
             u = 319
-        for horizontal in range(l,r+1,3):
-            for vertical in range(d,u+1,3):
+        for horizontal in range(l,r+1,6):
+            for vertical in range(d,u+1,6):
                 tbr.add((horizontal,vertical))
 
 
     tbr=list(tbr)
-    #print(tbr)
+    # print(l,r,d,u)
     return tbr
 
 
-def segmentation(eye,eye_denoised,eye1):
-    print("----------Segmentation-----------")
+def segmentation(eye,eye_denoised,eye1,folder,lr,fileNum):
+    # print("----------Segmentation-----------")
     possibleCenter=[]
     pupilCircle=getPossiblePupilCircle(eye_denoised)
     for i in range(240):  # 0 to 240
@@ -67,7 +67,7 @@ def segmentation(eye,eye_denoised,eye1):
             temp.append((i[0][1],i[0][0])) # ye ulta x,y deta hai
             possibleCenter=getPossibleCenter(temp)
             #print(possibleCenter)
-            print("possible center len=",len(possibleCenter))
+            # print("possible center len=",len(possibleCenter))
 
 
 
@@ -81,7 +81,7 @@ def segmentation(eye,eye_denoised,eye1):
         preAvg=260
       #  print("i=",i)
        # print(possibleCenter[i][0], possibleCenter[i][1])
-        for r in range(30,60):
+        for r in range(25,65):
             sum=0
             count=0
 
@@ -98,21 +98,22 @@ def segmentation(eye,eye_denoised,eye1):
                 R1=r
                 maxAvgDiff=Avg-preAvg
             preAvg=Avg
-
-    print("X=",X,"Y=",Y,"R=",R1)
+    # R1+=5
+    # print("X=",X,"Y=",Y,"R=",R1)
+    # print(count)
     cimg=cv2.cvtColor(eye,cv2.COLOR_GRAY2BGR)
     cv2.circle(cimg, (Y,X), R1, (0, 255, 0), 2)
 
     preAvg=260
     maxAvgDiff=0
-    for r in range(95, 120):
+    for r in range(80, 120):
         sum = 0
         count = 0
 
         for t in range(360):
             x1 = (int)(X + r * math.cos(t * 3.14 / 180))
             y1 = (int)(Y + r * math.sin(t * 3.14 / 180))
-            if (not (x1 <= 0 or x1 >= 240 or y1 <= 0 or y1 >= 320)):
+            if (not (x1 <= 0 or x1 >= 240 or y1 <= 0 or y1 >= 320) and (t>0 and t<45 or t>180 and t<270 or t>350 and t<360)):
                 count += 1
                 sum += eye_denoised[x1][y1]
         Avg = (sum / count)
@@ -120,13 +121,12 @@ def segmentation(eye,eye_denoised,eye1):
             R2 = r
             maxAvgDiff = Avg - preAvg
         preAvg = Avg
-
-    print("R2", R2)
-    #print(eye)
+    # print("R2", R2)
+    # #print(eye)
     cv2.circle(cimg, (Y, X), R2, (0, 0, 255), 2)
-    cv2.imwrite("segmentation.jpg", cimg)
+    # # cv2.imwrite("segmentation.jpg", cimg)
     cv2.imshow("Segmented Image",cimg)
     cv2.waitKey(0)
-    cv2.destroyWindow("Segmented Image")
+    # cv2.destroyWindow("Segmented Image")
     # eye=skimage.img_as_float(eye)
-    Normalization.normalization(eye, R1, R2, X, Y)
+    Normalization.normalization(eye, R1, R2, X, Y,folder,lr,fileNum)

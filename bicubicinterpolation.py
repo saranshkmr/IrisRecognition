@@ -6,17 +6,19 @@ import skimage
 import GaborFilter
 import EyeLidRemoval
 
-def bicubicinterpolation(normimg):
-    print("----------BicubicInterpolation-----------")
-    n=40
-    m=360
-    convimg=[[0 for x in range(int(360/m))] for y in range(int(40/n))]
+def bicubicinterpolation(normimg,folder,lr,fileNum):
+    # print("----------BicubicInterpolation-----------")
+    n=3
+    m=3
+    convimg=[[0 for x in range(int(360/m)+1)] for y in range(int(40/n)+1)]
     for i in range(0,40,n):
         for j in range(0,360,m):
             sum=0.0
             for x in range(n):
                 for y in range(m):
-                    sum=sum+normimg[i+x][j+y]
+                    if((i+x)<40 and (j+y)<360):
+                        sum=sum+normimg[i+x][j+y]
+            # print(int(i/n),int(j/m))
             convimg[int(i/n)][int(j/m)]=int(sum/(n*m))
     convimg=np.asarray(convimg)
     convimg=skimage.img_as_ubyte(convimg)
@@ -27,7 +29,9 @@ def bicubicinterpolation(normimg):
     min=500
     for i in range(40):
         for j in range(360):
-            resultimg[i][j]=normimg[i][j]-resultimg[i][j]
+            resultimg[i][j]=normimg[i][j]+resultimg[i][j]
+            # if(resultimg[i][j]>255):print("g")
+            # if(resultimg[i][j]<0):print("l")
     #         if(resultimg[i][j]>max):
     #             max=resultimg[i][j]
     #         if(resultimg[i][j]<min):
@@ -60,4 +64,4 @@ def bicubicinterpolation(normimg):
     # normimg=skimage.img_as_ubyte(normimg)
     #print(normimg)
     maskIMage=EyeLidRemoval.eyeLidRemoval(normimg)
-    GaborFilter.gaborFilter(normimg,maskIMage)
+    GaborFilter.gaborFilter(resultimg,maskIMage,folder,lr,fileNum)

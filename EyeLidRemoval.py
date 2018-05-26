@@ -4,25 +4,7 @@ import skimage
 import math
 
 def eyeLidRemoval(normalImage):
-    # ksize = (10, 10)  # size of gabor filter (n, n)
-    # sigma = 0.9  # standard deviation of the gaussian function
-    # theta = np.pi/16  # orientation of the normal to the parallel stripes
-    # lamda = 10  # wavelength of the sunusoidal factor
-    # gamma = 1.5  # spatial aspect ratio
-    # psi = 0  # np.pi/20 # phase offset
-    # # ktype - type and range of values that each pixel in the gabor kernel can hold
-    # # cv2.getGaborKernel(ksize, sigma, theta, lambda, gamma, psi, ktype)
-    #
-    # normalizedImage = np.asarray(normImage)
-    # # print(normalizedImage)
-    #
-    # kernel = cv2.getGaborKernel(ksize, sigma, theta, lamda, gamma, psi, ktype=cv2.CV_32F)
-    #
-    # filteredImage = cv2.filter2D(skimage.img_as_ubyte(normalizedImage), -1, kernel)
-    #
-    # clahe = cv2.createCLAHE(clipLimit=2, tileGridSize=(8, 8))
-    # filteredImage = clahe.apply(filteredImage)
-    # normalImage= skimage.img_as_ubyte(normalImage)
+
     normImage=[[0 for i in range(360)] for j in range(40)]
     max = -5
     for i in range(40):
@@ -69,7 +51,7 @@ def eyeLidRemoval(normalImage):
         for j in range(270,180,-1):
             if(convimg[i][j]>200 and last==270):
                 last=j
-    print(first,last)
+    # print(first,last)
     if (first == 90 and last == 270):
         last = 180
         first = 179
@@ -82,7 +64,7 @@ def eyeLidRemoval(normalImage):
     maxPerc=0
     B=0
     A=0
-    print(first,last)
+    # print(first,last)
     for b in range(5,55):
         whiteCount=0
         blackCount=0
