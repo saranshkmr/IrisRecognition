@@ -104,6 +104,6 @@ def eyeLidRemoval(normalImage):
     # cv2.imshow("normalized", normalImage)
     # cv2.waitKey(0)
     # cv2.imshow("mask",newImg)
-    # cv2.imwrite("eyeLidRemoved.jpg", newImg)
+    # # cv2.imwrite("eyeLidRemoved.jpg", newImg)
     # cv2.waitKey(0)
     return newImg

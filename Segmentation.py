@@ -7,13 +7,13 @@ import Normalization
 
 def getPossiblePupilCircle(img):
     circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, 20,
-                               param1=35, param2=50, minRadius=25, maxRadius=90)
+                               param1=25, param2=50, minRadius=30, maxRadius=150)
     circles = np.uint16(np.around(circles))
     return circles
 
 def getPossibleCenter(temp):
     tbr=set()
-    ref=20
+    ref=8
     for i in range(len(temp)):
         x=temp[i][0]
         y=temp[i][1]
@@ -33,8 +33,8 @@ def getPossibleCenter(temp):
             u = y + ref
         else:
             u = 319
-        for horizontal in range(l,r+1,6):
-            for vertical in range(d,u+1,6):
+        for horizontal in range(l,r+1,3):
+            for vertical in range(d,u+1,3):
                 tbr.add((horizontal,vertical))
 
 
@@ -113,7 +113,7 @@ def segmentation(eye,eye_denoised,eye1,folder,lr,fileNum):
         for t in range(360):
             x1 = (int)(X + r * math.cos(t * 3.14 / 180))
             y1 = (int)(Y + r * math.sin(t * 3.14 / 180))
-            if (not (x1 <= 0 or x1 >= 240 or y1 <= 0 or y1 >= 320) and (t>0 and t<45 or t>180 and t<270 or t>350 and t<360)):
+            if (not (x1 <= 0 or x1 >= 240 or y1 <= 0 or y1 >= 320) ):#and (t>0 and t<45 or t>180 and t<270 or t>350 and t<360)):
                 count += 1
                 sum += eye_denoised[x1][y1]
         Avg = (sum / count)
@@ -125,8 +125,8 @@ def segmentation(eye,eye_denoised,eye1,folder,lr,fileNum):
     # #print(eye)
     cv2.circle(cimg, (Y, X), R2, (0, 0, 255), 2)
     # # cv2.imwrite("segmentation.jpg", cimg)
-    cv2.imshow("Segmented Image",cimg)
-    cv2.waitKey(0)
+    # cv2.imshow("Segmented Image",cimg)
+    # cv2.waitKey(0)
     # cv2.destroyWindow("Segmented Image")
     # eye=skimage.img_as_float(eye)
     Normalization.normalization(eye, R1, R2, X, Y,folder,lr,fileNum)

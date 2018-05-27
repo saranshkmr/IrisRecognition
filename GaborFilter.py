@@ -56,13 +56,13 @@ def manyFilteredImages(normalizedImage,ksize,sigma,theta,lamda,gamma,psi):
 
 
 def gaborFilter(normalizedImage,maskImage,folder,lr,fileNum):
-    print("----------Gabor filter-----------")
-    ksize = (51,51)#(21,21) # size of gabor filter (n, n)
-    sigma = 1.4#0.6 # standard deviation of the gaussian function
+    # print("----------Gabor filter-----------")
+    ksize = (4,4)#(21,21) # size of gabor filter (n, n)
+    sigma = 0.6#0.6 # standard deviation of the gaussian function
     theta = 0#0 # orientation of the normal to the parallel stripes
-    lamda = np.pi/2500000 # wavelength of the sunusoidal factor
-    gamma = 0.9#0.7 # spatial aspect ratio
-    psi   =0#-1*np.pi/8# phase offset
+    lamda = np.pi/8055 # wavelength of the sunusoidal factor
+    gamma = 2#0.7 # spatial aspect ratio
+    psi   =0#-1*np.pi/4# phase offset
     #ktype - type and range of values that each pixel in the gabor kernel can hold
     # cv2.getGaborKernel(ksize, sigma, theta, lambda, gamma, psi, ktype)
 
@@ -70,6 +70,10 @@ def gaborFilter(normalizedImage,maskImage,folder,lr,fileNum):
     #print(normalizedImage)
 
     realFilteredImageArray,imaginaryFilteredImageArray= addSubplot(normalizedImage,ksize,sigma,theta,lamda,gamma,psi)
+    # print(len(realFilteredImageArray),len(realFilteredImageArray[0]))
+
+    realFilteredImageArray,imaginaryFilteredImageArray,maskImage= updateHammingCode(realFilteredImageArray, imaginaryFilteredImageArray,maskImage)
+    # print(len(realFilteredImageArray), len(realFilteredImageArray[0]))
 
     strArray=[]
     r0=0
@@ -93,9 +97,14 @@ def gaborFilter(normalizedImage,maskImage,folder,lr,fileNum):
         minR=0
         maxR=255
         maxI=255
-        for i in range(40):
-            for j in range(360):
-                if (maskImage[i][j] > 200):
+        # cv2.imshow("real",np.asarray(realFilteredImageArray[k]))
+        # cv2.imshow("imag",np.asarray(imaginaryFilteredImageArray[k]))
+        # cv2.imshow("mask",np.asarray(maskImage))
+        # cv2.waitKey(0)
+
+        for i in range(len(realFilteredImageArray[k])):
+            for j in range(len(realFilteredImageArray[k][i])):
+                if (maskImage[i][j] > 100):
                     str1 = "4"
                 elif ((realFilteredImageArray[k][i][j] >= minR) and (
                         realFilteredImageArray[k][i][j] <= minR + ((maxR - minR) / 8))):
@@ -112,7 +121,7 @@ def gaborFilter(normalizedImage,maskImage,folder,lr,fileNum):
                 else:
                     str1 = "3"
                 str = str + str1
-                if (maskImage[i][j] > 200):
+                if (maskImage[i][j] > 100):
                     str1 = "4"
                 elif ((imaginaryFilteredImageArray[k][i][j] >= minI) and (
                         imaginaryFilteredImageArray[k][i][j] <= minI + ((maxI - minI) / 8))):
@@ -132,7 +141,7 @@ def gaborFilter(normalizedImage,maskImage,folder,lr,fileNum):
                 str = str + str1
             str = str + " "
         strArray.append(str)
-        print(str)
+        # print(str)
         # print(imaginaryFilteredImageArray[k])
 
         # for i in range(40):
@@ -159,8 +168,52 @@ def gaborFilter(normalizedImage,maskImage,folder,lr,fileNum):
 
         #print("r0=",r0," r1=",r1," i0=",i0," i1=",i1)
         # print(minR,maxR,minI,maxI)
-
     WriteStringToFile.writeStringToFile(strArray)
     HammingDistance.hammingdistance(strArray)
+
+
+
+def updateHammingCode(realFilteredImageArray,imaginaryFilteredImageArray,maskImage):
+    n=4
+    tbrReal=[]
+    tbrImag=[]
+    newReal=[[0 for x in range(int(360/n)+1)] for y in range(int(40/n)+1)]
+    newImag=[[0 for x in range(int(360/n)+1)] for y in range(int(40/n)+1)]
+    newMask=[[0 for x in range(int(360/n)+1)] for y in range(int(40/n)+1)]
+
+    for index in range(len(realFilteredImageArray)):
+        realImage=realFilteredImageArray[index]
+        imaginaryImage=imaginaryFilteredImageArray[index]
+
+        for i in range(0,len(realImage),n):
+            for j in range(0,len(realImage[0]),n):
+                realSum=0
+                imagSum=0
+                if((i+n-1)<40 and (j+n-1)<360):
+                    for k in range(i,i+n):
+                        for l in range(j,j+n):
+                            realSum+=realImage[k][l]
+                            imagSum+=imaginaryImage[k][l]
+                realAvg=int(realSum/(n*n))
+                imaginaryAvg=int(imagSum/(n*n))
+                newReal[int(i/n)][int(j/n)]=realAvg
+                newImag[int(i/n)][int(j/n)]=imaginaryAvg
+        newReal=skimage.img_as_ubyte(newReal)
+        newImag=skimage.img_as_ubyte(newImag)
+        tbrReal.append(newReal)
+        tbrImag.append(newImag)
+    for i in range(0, len(maskImage), n):
+        for j in range(0, len(maskImage[0]), n):
+            sum=0
+            if ((i + n - 1) < 40 and (j + n - 1) < 360):
+                for k in range(i, i + n):
+                    for l in range(j, j + n):
+                        sum+=maskImage[k][l]
+            newMask[int(i/n)][int(j/n)]=int(sum/(n*n))
+    newMask=skimage.img_as_ubyte(newMask)
+
+
+    return tbrReal,tbrImag,newMask
+
 
 

@@ -59,6 +59,7 @@ def bicubicinterpolation(normimg,folder,lr,fileNum):
 
     # print(resultimg)
     # cv2.imshow("bicubic interpolation processed image",resultimg)
+    # cv2.imwrite("resultimg.jpg",resultimg)
     # cv2.waitKey(0)
     # cv2.destroyWindow("bicubic interpolation processed image")
     # normimg=skimage.img_as_ubyte(normimg)
